@@ -81,7 +81,7 @@ gr.Interface(
                 "zh",
             ],
             max_choices=1,
-            value="zh",
+            value="zh-cn",
         ),
         gr.Audio(
             label="通过文件上传语音",
