@@ -5,12 +5,18 @@ tts = TTS("tts_models/multilingual/multi-dataset/xtts_v1")
 tts.to("cuda")
 
 
-def predict(prompt, language, audio_file_pth, agree):
+def predict(prompt, language, audio_file_pth, audio_mic, agree):
+
+    if audio_mic is not None:
+        audio = audio_mic
+    else:
+        audio = audio_file_pth
+        
     if agree == True:
         tts.tts_to_file(
             text=prompt,
             file_path="output.wav",
-            speaker_wav=audio_file_pth,
+            speaker_wav=audio,
             language=language,
         )
 
@@ -47,27 +53,6 @@ article = """
 </div>
 """
 
-examples = [
-    [
-        "Once when I was six years old I saw a magnificent picture.",
-        "en",
-        "examples/female.wav",
-        True,
-    ],
-    [
-        "Lorsque j'avais six ans j'ai vu, une fois, une magnifique image.",
-        "fr",
-        "examples/male.wav",
-        True,
-    ],
-    [
-        "Un tempo lontano, quando avevo sei anni, vidi un magnifico disegno.",
-        "it",
-        "examples/female.wav",
-        True,
-    ],
-]
-
 gr.Interface(
     fn=predict,
     inputs=[
@@ -95,26 +80,28 @@ gr.Interface(
                 "zh",
             ],
             max_choices=1,
-            value="en",
+            value="zh",
         ),
         gr.Audio(
-            label="Reference Audio",
-            info="Click on the ✎ button to upload your own target speaker audio",
+            label="通过文件上传语音",
             type="filepath",
-            value="examples/female.wav",
+        ),
+        gr.Audio(
+            label="使用麦克风上传语音",
+            type="filepath",
+            source="microphone",
         ),
         gr.Checkbox(
-            label="Agree",
-            value=False,
-            info="I agree to the terms of the Coqui Public Model License at https://coqui.ai/cpml",
+            label="使用条款",
+            value=True,
+            info="我承诺：不会利用此程序生成对个人或组织造成侵害的任何内容",
         ),
     ],
     outputs=[
-        gr.Video(label="Waveform Visual"),
-        gr.Audio(label="Synthesised Audio"),
+        gr.Video(label="为您合成的专属音频"),
+        gr.Audio(label="Synthesised Audio", visible=False),
     ],
     title=title,
     description=description,
     article=article,
-    examples=examples,
 ).queue().launch(debug=True)
