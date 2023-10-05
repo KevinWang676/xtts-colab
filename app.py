@@ -59,7 +59,8 @@ gr.Interface(
         gr.Textbox(
             label="Text Prompt",
             info="One or two sentences at a time is better",
-            value="It took me quite a long time to develop a voice, and now that I have it I'm not going to be silent.",
+            lines=3,
+            placeholder=""想说却还没说的 还很多
         ),
         gr.Dropdown(
             label="Language",
