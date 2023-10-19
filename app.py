@@ -60,7 +60,7 @@ gr.Interface(
             label="Text Prompt",
             info="One or two sentences at a time is better",
             lines=3,
-            placeholder=""想说却还没说的 还很多
+            placeholder="想说却还没说的 还很多"
         ),
         gr.Dropdown(
             label="Language",
